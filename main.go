@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// this struct defines a person according to the sql schema
 type Person struct {
 	ID        int    `db:"user_id" json:"id,omitempty"`
 	Username  string `db:"username" json:"username,omitempty"`
@@ -19,11 +20,14 @@ type Person struct {
 	Status    int    `db:"status" json:"status,omitempty"`
 }
 
+// the list of people in the response
 var people []Person
 
 func main() {
+	// fixed creds for use in poc
 	dsn := "root:@/sqlquery-poc"
 	db, err := sqlx.Connect("mysql", dsn)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,6 +43,7 @@ func main() {
 		people := []Person{}
 		err = db.Select(&people, query)
 		if err != nil {
+			// return the error directly to the user
 			err = json.NewEncoder(w).Encode(err)
 		} else  {
 			err = json.NewEncoder(w).Encode(people)
@@ -50,6 +55,7 @@ func main() {
 	checkErr(err)
 }
 
+// handle error simply abort - this is ok for a poc
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
