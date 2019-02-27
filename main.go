@@ -25,7 +25,7 @@ var people []Person
 
 func main() {
 	// fixed creds for use in poc
-	dsn := "root:@/sqlquery-poc"
+	dsn := "performance:performance@/performance"
 	db, err := sqlx.Connect("mysql", dsn)
 
 	if err != nil {
